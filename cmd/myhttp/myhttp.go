@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/sergey-kurenkov/test-task-04-05-2021/internal/httpmd5"
+	"github.com/sergey-kurenkov/test-task-http-md5/internal/httpmd5"
 )
 
 func main() {

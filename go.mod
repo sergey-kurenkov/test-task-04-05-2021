@@ -1,4 +1,4 @@
-module github.com/sergey-kurenkov/test-task-04-05-2021
+module github.com/sergey-kurenkov/test-task-http-md5
 
 go 1.16
 
