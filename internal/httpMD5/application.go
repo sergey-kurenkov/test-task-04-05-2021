@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 type Application struct {
@@ -18,8 +19,8 @@ func NewApplication(out io.Writer, client *http.Client) *Application {
 	}
 }
 
-func (this *Application) Run(parallel int, urls []string) {
-	httpMD5Client := NewHTTPMD5(this.client)
+func (this *Application) Run(parallel int, timeout time.Duration, urls []string) {
+	httpMD5Client := NewHTTPMD5(this.client, timeout)
 
 	urlMD5s := httpMD5Client.GetMD5(parallel, urls)
 

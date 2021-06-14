@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestApplicationOneURL(t *testing.T) {
@@ -17,7 +18,7 @@ func TestApplicationOneURL(t *testing.T) {
 	app := NewApplication(buffer, httpServer.Client())
 
 	testURL := httpServer.URL + "/"
-	app.Run(10, []string{testURL})
+	app.Run(10, time.Second, []string{testURL})
 
 	expectedAnswer := fmt.Sprintf("%s%s %s\n", httpServer.URL, "/", makeMD5("/"))
 
@@ -39,11 +40,11 @@ func TestApplicationWrongURL(t *testing.T) {
 	app := NewApplication(buffer, httpServer.Client())
 
 	testURL := "http://www.not-existing-host-anywhere"
-	app.Run(10, []string{testURL})
+	app.Run(10, time.Second, []string{testURL})
 
 	receivedAnswer := buffer.String()
 
-	if !strings.HasPrefix(receivedAnswer, 	fmt.Sprintf("%s, error: ", testURL)) {
+	if !strings.HasPrefix(receivedAnswer, fmt.Sprintf("%s, error: ", testURL)) {
 		t.Errorf("wrong result: expected error: %s", receivedAnswer)
 	}
 }

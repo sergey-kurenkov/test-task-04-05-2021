@@ -1,10 +1,12 @@
 package httpmd5
 
 import (
+	"context"
 	"crypto/md5"
 	"io/ioutil"
 	"strings"
 	"sync"
+	"time"
 )
 
 import (
@@ -39,12 +41,14 @@ func (this URLMD5) String() string {
 }
 
 type HTTPMD5 struct {
-	client *http.Client
+	client  *http.Client
+	timeout time.Duration
 }
 
-func NewHTTPMD5(client *http.Client) *HTTPMD5 {
+func NewHTTPMD5(client *http.Client, timeout time.Duration) *HTTPMD5 {
 	return &HTTPMD5{
-		client: client,
+		client:  client,
+		timeout: timeout,
 	}
 }
 
@@ -55,7 +59,21 @@ func (this *HTTPMD5) getURLMD5(url string) URLMD5 {
 		url = "http://" + url
 	}
 
-	resp, err := this.client.Get(url)
+	ctx, cancel := context.WithTimeout(context.Background(), this.timeout)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return URLMD5{
+			URL: url,
+			MD5: nil,
+			Err: &err,
+		}
+	}
+
+	req = req.WithContext(ctx)
+
+	resp, err := this.client.Do(req)
 	if err != nil {
 		return URLMD5{
 			URL: url,

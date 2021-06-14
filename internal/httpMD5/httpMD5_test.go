@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 )
 
 func makeTestHTTPServer() *httptest.Server {
@@ -36,7 +37,7 @@ func TestOneURL(t *testing.T) {
 	httpServer := makeTestHTTPServer()
 	defer httpServer.Close()
 
-	httpMD5 := NewHTTPMD5(httpServer.Client())
+	httpMD5 := NewHTTPMD5(httpServer.Client(), time.Second)
 	testURL := httpServer.URL + "/"
 	md5s := httpMD5.GetMD5(1, []string{testURL})
 
@@ -63,7 +64,7 @@ func TestWrongURL(t *testing.T) {
 	httpServer := makeTestHTTPServer()
 	defer httpServer.Close()
 
-	httpMD5 := NewHTTPMD5(httpServer.Client())
+	httpMD5 := NewHTTPMD5(httpServer.Client(), time.Second)
 	testURL := "http://www.not-existing-host-anywhere"
 	md5s := httpMD5.GetMD5(1, []string{testURL})
 
@@ -86,7 +87,7 @@ func TestManyURLs(t *testing.T) {
 	httpServer := makeTestHTTPServer()
 	defer httpServer.Close()
 
-	httpMD5 := NewHTTPMD5(httpServer.Client())
+	httpMD5 := NewHTTPMD5(httpServer.Client(), time.Second)
 
 	testURLs := []string{}
 
