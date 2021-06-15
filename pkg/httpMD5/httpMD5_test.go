@@ -42,8 +42,7 @@ func TestOneURL(t *testing.T) {
 	md5s := httpMD5.GetMD5(1, []string{testURL})
 
 	if len(md5s) != 1 {
-		t.Error("one answer is expected")
-		return
+		t.Fatal("one answer is expected")
 	}
 
 	if md5s[0].URL != testURL {
@@ -51,11 +50,11 @@ func TestOneURL(t *testing.T) {
 	}
 
 	if md5s[0].Err != nil || md5s[0].MD5 == nil {
-		t.Errorf("error is not expected")
+		t.Error("error is not expected")
 	}
 
 	if *md5s[0].MD5 != makeMD5("/") {
-		t.Errorf("md5 is not correct")
+		t.Error("md5 is not correct")
 	}
 }
 
@@ -69,8 +68,7 @@ func TestWrongURL(t *testing.T) {
 	md5s := httpMD5.GetMD5(1, []string{testURL})
 
 	if len(md5s) != 1 {
-		t.Error("one answer is expected")
-		return
+		t.Fatal("one answer is expected")
 	}
 
 	if md5s[0].URL != testURL {
@@ -100,13 +98,12 @@ func TestManyURLs(t *testing.T) {
 	md5s := httpMD5.GetMD5(10, testURLs)
 
 	if len(md5s) != numReqests {
-		t.Errorf("wrong number of responses: %v", len(md5s))
-		return
+		t.Fatalf("wrong number of responses: %v", len(md5s))
 	}
 
 	for _, urlMD5 := range md5s {
 		if urlMD5.Err != nil || urlMD5.MD5 == nil {
-			t.Errorf("error is not expected")
+			t.Fatal("error is not expected")
 		}
 
 		body := strings.TrimPrefix(urlMD5.URL, httpServer.URL)
@@ -114,8 +111,7 @@ func TestManyURLs(t *testing.T) {
 		bodyMD5 := makeMD5(body)
 
 		if *urlMD5.MD5 != bodyMD5 {
-			t.Errorf("md5 is not correct: %v", urlMD5)
-			return
+			t.Fatalf("md5 is not correct: %v", urlMD5)
 		}
 	}
 }

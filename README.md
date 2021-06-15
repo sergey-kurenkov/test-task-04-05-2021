@@ -8,7 +8,7 @@ go build cmd/myhttp/myhttp.go
 # Unit tests:
 
 ```
-go test -v ./internal/httpMD5
+go test -v ./pkg/httpMD5
 ```
 
 # Usage:
