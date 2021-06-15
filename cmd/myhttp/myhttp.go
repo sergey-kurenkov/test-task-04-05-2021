@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/sergey-kurenkov/test-task-http-md5/internal/httpmd5"
+	"github.com/sergey-kurenkov/test-task-http-md5/pkg/httpmd5"
 )
 
 func main() {
